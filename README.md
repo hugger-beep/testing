@@ -80,7 +80,7 @@ aws lambda invoke \
 
 ## Step 4: Apply SCP/RCP in Target Account
 
-### SCP Option 1 - Basic Org Restriction
+### SCP Option 1 - Basic Org Restriction  // don't use this policy , use the one below that tries to block AWS lambda and IAM role assumption
 
 ```json
 {
