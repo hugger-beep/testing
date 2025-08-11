@@ -80,7 +80,7 @@ aws lambda invoke \
 
 ## Step 4: Apply SCP/RCP in Target Account
 
-### SCP Option 1 - Basic Org Restriction  // don't use this policy , use the one below that tries to block AWS lambda and IAM role assumption
+### SCP Option 1 - Basic Org Restriction
 
 ```json
 {
@@ -495,3 +495,24 @@ An error occurred (AccessDeniedException) when calling the GetSecretValue operat
 ## Conclusion
 
 **RCPs are the most effective way to block cross-account access** for supported services, as they can override resource-based policies. For services not yet supported by RCPs (like Lambda), removing or restricting resource-based policies remains the primary control mechanism.
+
+### For AWS lambda invocation Resource Policy will work since RCP is not supported
+``` json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowOrgInvokeOnly",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "lambda:InvokeFunction",
+      "Resource": "arn:aws:lambda:us-west-2:<AccountA-ID>:function:demo-external-access",
+      "Condition": {
+        "StringEquals": {
+          "aws:PrincipalOrgID": "o-7dnzuko137"
+        }
+      }
+    }
+  ]
+}
+```
